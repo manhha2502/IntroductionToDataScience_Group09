@@ -614,6 +614,22 @@ def create_features(df: pd.DataFrame) -> pd.DataFrame:
         df_featured.drop(columns='category_avg_price', inplace=True, errors='ignore')
     elif 'price' in df_featured.columns:
         df_featured['price_vs_category'] = 1.0
+
+    keywords = [
+        'chính hãng', 'cao cấp', 'freeship', 'xịn', 'hot',
+        'giảm', 'sale', 'tặng', 'combo', 'bảo hành',
+        'nhập khẩu', 'siêu rẻ'
+    ]
+
+    for kw in keywords:
+        col_name = f'kw_{kw}'
+        df_featured[col_name] = (
+            df_featured['product_name']
+            .astype(str)
+            .str.lower()
+            .str.contains(kw)
+            .astype(int)
+    )
     
     # Hot Keyword Count
     if 'product_name' in df_featured.columns:
