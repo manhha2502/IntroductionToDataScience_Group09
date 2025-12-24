@@ -729,7 +729,7 @@ def encode_categorical(df: pd.DataFrame) -> pd.DataFrame:
 # ==================== SCALING ====================
 
 def scale_and_split(df: pd.DataFrame, test_size: float = 0.2, random_state: int = 42, 
-                   save_files: bool = False) -> tuple:
+                   save_files: bool = False, columns_to_exclude: list = None) -> tuple:
     """
     Chức năng:
         - Chia tập train, text
@@ -740,6 +740,7 @@ def scale_and_split(df: pd.DataFrame, test_size: float = 0.2, random_state: int 
         - test_size : tỉ lệ tập test
         - random_state : random seed
         - save_files : có lưu file CSV không 
+        - columns_to_exclude : danh sách cột không cần scale
     
     Giá trị trả về:
         - tuple: (train_df, test_df, scaler)
@@ -747,14 +748,15 @@ def scale_and_split(df: pd.DataFrame, test_size: float = 0.2, random_state: int 
     # Chia tập train-test
     train_df, test_df = train_test_split(df, test_size=test_size, random_state=random_state)
     
-    # Binary columns
-    binary_cols = ['is_official', 'is_authentic', 'is_brand', 
-                   'is_freeship_xtra', 'is_return_policy', 'has_video']
+    # Nếu không có columns_to_exclude, sử dụng binary columns mặc định
+    if columns_to_exclude is None:
+        columns_to_exclude = ['is_official', 'is_authentic', 'is_brand', 
+                              'is_freeship_xtra', 'is_return_policy', 'has_video', 'quantity_sold']
     
-     # Xác định các cột cần scale (loại bỏ binary columns)
+    # Xác định các cột cần scale (loại bỏ columns_to_exclude)
     cols_to_scale = [col for col in train_df.columns 
                      if train_df[col].dtype in ['float64', 'int64'] 
-                     and col not in binary_cols]
+                     and col not in columns_to_exclude]
     
     # Xử lý NaN và inf
     train_df[cols_to_scale] = train_df[cols_to_scale].replace([np.inf, -np.inf], 0).fillna(0)
