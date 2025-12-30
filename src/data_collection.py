@@ -20,7 +20,7 @@ OUTPUT_FILE_1 = "../data/raw/tiki_initial_data.csv"
 # Kết quả bước 2 (Thêm chi tiết sản phẩm)
 OUTPUT_FILE_2 = "../data/raw/tiki_products_data.csv"
 # Kết quả bước 3 (Thêm chi tiết shop và performance)
-OUTPUT_FILE_3 = "../data/raw/tiki_products.csv"
+OUTPUT_FILE_3 = "../data/raw/data.csv"
 
 # Thời gian chờ giữa các lần gọi API
 TIME_SLEEP = 1
